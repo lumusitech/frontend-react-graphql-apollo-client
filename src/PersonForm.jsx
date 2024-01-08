@@ -9,12 +9,17 @@ export const PersonForm = ({ notifyError }) => {
   const [street, setStreet] = useState('')
   const [city, setCity] = useState('')
   const [createPerson] = useMutation(CREATE_PERSON, {
-    refetchQueries: [
-      {
-        query: GET_PERSONS,
-      },
-    ],
     onError: error => notifyError(error.graphQLErrors[0].message),
+    update: (store, response) => {
+      const dataInStore = store.readQuery({ query: GET_PERSONS })
+      store.writeQuery({
+        query: GET_PERSONS,
+        data: {
+          ...dataInStore,
+          allPersons: [...dataInStore.allPersons, response.data.addPerson],
+        },
+      })
+    },
   })
 
   const handleSubmit = e => {
@@ -48,6 +53,7 @@ export const PersonForm = ({ notifyError }) => {
           />
 
           <br />
+          <br />
 
           <input
             placeholder='Phone'
@@ -56,6 +62,7 @@ export const PersonForm = ({ notifyError }) => {
             onChange={e => setPhone(e.target.value)}
           />
 
+          <br />
           <br />
 
           <input
@@ -66,6 +73,7 @@ export const PersonForm = ({ notifyError }) => {
           />
 
           <br />
+          <br />
 
           <input
             placeholder='City'
@@ -74,6 +82,7 @@ export const PersonForm = ({ notifyError }) => {
             onChange={e => setCity(e.target.value)}
           />
 
+          <br />
           <br />
 
           <button type='submit'>add</button>

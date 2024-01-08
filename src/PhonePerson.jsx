@@ -42,12 +42,18 @@ export const PhoneForm = ({ notifyError }) => {
             onChange={e => setName(e.target.value)}
           />
 
+          <br />
+          <br />
+
           <input
             placeholder='Phone'
             type='text'
             value={phone}
             onChange={e => setPhone(e.target.value)}
           />
+
+          <br />
+          <br />
 
           <button type='submit'>update</button>
         </form>
